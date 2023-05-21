@@ -1,9 +1,9 @@
 package model
 
 type Recipe struct {
-	Id          int
+	Id          uint
 	Name        string
 	Ingredients []Ingredient
 	CookId      int
-	Ratings     []int
+	Ratings     []Rating
 }
