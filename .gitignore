@@ -1,1 +1,4 @@
+#Exclude presentation
 *.pptx
+#Exclude local MongoDB files
+localMongoDB/*

@@ -1,9 +1,11 @@
 package model
 
+import "go.mongodb.org/mongo-driver/bson/primitive"
+
 type Recipe struct {
-	Id          uint
-	Name        string
-	Ingredients []Ingredient
-	CookId      int
-	Ratings     []Rating
+	ID          primitive.ObjectID `bson:"_id,omitempty"`
+	Name        string             `bson:"name,omitempty"`
+	Ingredients []Ingredient       `bson:"ingredients,omitempty"`
+	CookId      int                `bson:"cookId,omitempty"`
+	Ratings     []Rating           `bson:"ratings,omitempty"`
 }

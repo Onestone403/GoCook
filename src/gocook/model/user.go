@@ -1,15 +1,10 @@
 package model
 
-type Role string
-
-const (
-	COOK string = "cook"
-	USER string = "user"
-)
+import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type User struct {
-	Id        int
-	FirstName string
-	LastName  string
-	Role      Role
+	ID        primitive.ObjectID `bson:"_id,omitempty"`
+	FirstName string             `bson:"FirstName,omitempty"`
+	LastName  string             `bson:"LastName,omitempty"`
+	IsCook    bool
 }

@@ -1,8 +1,12 @@
 package service
 
 import (
+	"GoCook/db"
 	"GoCook/model"
 	"log"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var (
@@ -15,17 +19,19 @@ func init() {
 }
 
 func CreateRecipe(recipe *model.Recipe) error {
-	recipe.Id = actRecipeId
-	recipeStore[actRecipeId] = recipe
-	actRecipeId++
-	log.Printf("Successfully stored new campaign with ID %v in database.", recipe.Id)
-	log.Printf("Stored: %v", recipe)
+	insertResult, err := db.RecipeCollection.InsertOne(db.Ctx, recipe)
+	if err != nil {
+		log.Printf("Could not store new recipe in database: %v", err)
+	}
+	log.Printf("Successfully stored new recipe with ID %v in database.", insertResult.InsertedID)
+	recipe.ID = insertResult.InsertedID.(primitive.ObjectID)
 	return nil
 }
 
 func GetRecipe(id uint) (*model.Recipe, error) {
-	recipe, ok := recipeStore[id]
-	if !ok {
+	var recipe *model.Recipe
+	err := db.RecipeCollection.FindOne(db.Ctx, bson.M{"_id": id}).Decode(&recipe)
+	if err != nil {
 		return nil, nil
 	}
 	return recipe, nil
@@ -37,10 +43,12 @@ func UpdateRecipe(id uint, recipe *model.Recipe) (*model.Recipe, error) {
 		return existingRecipe, err
 	}
 
-	existingRecipe.Name = recipe.Name
-	existingRecipe.Ingredients = recipe.Ingredients
+	// existingRecipe.Name = recipe.Name
+	// existingRecipe.Ingredients = recipe.Ingredients
 
-	recipeStore[id] = existingRecipe
+	// recipeStore[id] = existingRecipe
+
+	db.RecipeCollection.UpdateOne(db.Ctx, bson.M{"Id": id}, bson.M{"$set": bson.M{"Name": recipe.Name, "Ingredients": recipe.Ingredients}})
 	return existingRecipe, nil
 }
 
@@ -54,9 +62,20 @@ func DeleteRecipe(id uint) (*model.Recipe, error) {
 }
 
 func GetRecipes() ([]*model.Recipe, error) {
-	recipes := make([]*model.Recipe, 0, len(recipeStore))
-	for _, recipe := range recipeStore {
-		recipes = append(recipes, recipe)
+	// recipes := make([]*model.Recipe, 0, len(recipeStore))
+	// for _, recipe := range recipeStore {
+	// 	recipes = append(recipes, recipe)
+	// }
+
+	var recipes []*model.Recipe
+	recipeCursor, err := db.RecipeCollection.Find(db.Ctx, bson.M{})
+	if err != nil {
+		panic(err)
 	}
+
+	if err = recipeCursor.All(db.Ctx, &recipes); err != nil {
+		panic(err)
+	}
+
 	return recipes, nil
 }

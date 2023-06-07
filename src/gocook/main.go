@@ -5,10 +5,17 @@ import (
 	"log"
 	"net/http"
 
+	"GoCook/db"
+
 	"github.com/gorilla/mux"
 )
 
+func init() {
+	defer db.Init()
+}
+
 func main() {
+
 	log.Printf("Starting Server")
 	router := mux.NewRouter()
 
