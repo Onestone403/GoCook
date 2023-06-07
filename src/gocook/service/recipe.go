@@ -28,7 +28,7 @@ func CreateRecipe(recipe *model.Recipe) error {
 	return nil
 }
 
-func GetRecipe(id uint) (*model.Recipe, error) {
+func GetRecipe(id primitive.ObjectID) (*model.Recipe, error) {
 	var recipe *model.Recipe
 	err := db.RecipeCollection.FindOne(db.Ctx, bson.M{"_id": id}).Decode(&recipe)
 	if err != nil {
@@ -37,27 +37,23 @@ func GetRecipe(id uint) (*model.Recipe, error) {
 	return recipe, nil
 }
 
-func UpdateRecipe(id uint, recipe *model.Recipe) (*model.Recipe, error) {
+func UpdateRecipe(id primitive.ObjectID, recipe *model.Recipe) (*model.Recipe, error) {
 	existingRecipe, err := GetRecipe(id)
 	if existingRecipe == nil || err != nil {
 		return existingRecipe, err
 	}
-
-	// existingRecipe.Name = recipe.Name
-	// existingRecipe.Ingredients = recipe.Ingredients
-
-	// recipeStore[id] = existingRecipe
-
-	db.RecipeCollection.UpdateOne(db.Ctx, bson.M{"Id": id}, bson.M{"$set": bson.M{"Name": recipe.Name, "Ingredients": recipe.Ingredients}})
+	existingRecipe.Name = recipe.Name
+	existingRecipe.Ingredients = recipe.Ingredients
+	db.RecipeCollection.UpdateOne(db.Ctx, bson.M{"_id": id}, bson.M{"$set": bson.M{"name": recipe.Name, "ingredients": recipe.Ingredients}})
 	return existingRecipe, nil
 }
 
-func DeleteRecipe(id uint) (*model.Recipe, error) {
+func DeleteRecipe(id primitive.ObjectID) (*model.Recipe, error) {
 	recipe, err := GetRecipe(id)
 	if recipe == nil || err != nil {
 		return recipe, err
 	}
-	delete(recipeStore, id)
+	// delete(recipeStore, id)
 	return recipe, nil
 }
 
@@ -69,6 +65,20 @@ func GetRecipes() ([]*model.Recipe, error) {
 
 	var recipes []*model.Recipe
 	recipeCursor, err := db.RecipeCollection.Find(db.Ctx, bson.M{})
+	if err != nil {
+		panic(err)
+	}
+
+	if err = recipeCursor.All(db.Ctx, &recipes); err != nil {
+		panic(err)
+	}
+
+	return recipes, nil
+}
+
+func GetRecipesByIngredient(ingredient string) ([]*model.Recipe, error) {
+	var recipes []*model.Recipe
+	recipeCursor, err := db.RecipeCollection.Find(db.Ctx, bson.M{"ingredients.name": ingredient})
 	if err != nil {
 		panic(err)
 	}

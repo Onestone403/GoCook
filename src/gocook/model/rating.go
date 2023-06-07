@@ -1,7 +1,7 @@
 package model
 
 type Rating struct {
-	Score   int    `bson:"Score,omitempty"`
-	Comment string `bson:"Comment,omitempty"`
-	UserId  uint   `bson:"UserId,omitempty"`
+	Score   int    `bson:"score,omitempty"`
+	Comment string `bson:"comment,omitempty"`
+	UserID  uint   `bson:"userID,omitempty"`
 }

@@ -25,6 +25,10 @@ func main() {
 	router.HandleFunc("/recipe/{id}", handler.UpdateRecipe).Methods("PUT")
 	router.HandleFunc("/recipe/{id}", handler.DeleteRecipe).Methods("DELETE")
 	router.HandleFunc("/recipes", handler.GetRecipes).Methods("GET")
+	router.HandleFunc("/recipes/{ingredient}", handler.GetRecipesByIngredient).Methods("GET")
+
+	//Rating route
+	router.HandleFunc("/recipe/{id}/rating", handler.AddRating).Methods("POST")
 
 	//User routes
 

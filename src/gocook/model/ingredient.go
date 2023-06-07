@@ -17,7 +17,7 @@ const (
 )
 
 type Ingredient struct {
-	Name         string  `bson:"Name,omitempty"`
-	NeededAmount float32 `bson:"NeededAmount,omitempty"`
-	Unit         Unit    `bson:"Unit,omitempty"`
+	Name         string  `bson:"name,omitempty"`
+	NeededAmount float32 `bson:"neededAmount,omitempty"`
+	Unit         Unit    `bson:"unit,omitempty"`
 }

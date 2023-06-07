@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func sendJson(w http.ResponseWriter, value interface{}) {
@@ -17,12 +17,17 @@ func sendJson(w http.ResponseWriter, value interface{}) {
 	}
 }
 
-func getId(r *http.Request) (uint, error) {
+func getId(r *http.Request) (primitive.ObjectID, error) {
 	vars := mux.Vars(r)
-	id, err := strconv.ParseUint(vars["id"], 10, 0)
+	id, err := primitive.ObjectIDFromHex(vars["id"])
 	if err != nil {
-		log.Printf("Can't parse ID from request: %v", err)
-		return 0, err
+		log.Printf("ID from request not a valid ObjectID!")
 	}
-	return uint(id), nil
+	return id, nil
+}
+
+func getIngredient(r *http.Request) (string, error) {
+	vars := mux.Vars(r)
+	ingredient := vars["ingredient"]
+	return ingredient, nil
 }

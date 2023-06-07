@@ -111,3 +111,22 @@ func GetRecipes(w http.ResponseWriter, r *http.Request) {
 	}
 	sendJson(w, recipes)
 }
+
+func GetRecipesByIngredient(w http.ResponseWriter, r *http.Request) {
+	ingredient, err := getIngredient(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	recipes, err := service.GetRecipesByIngredient(ingredient)
+	if err != nil {
+		log.Printf("Failure retrieving recipes: %v", err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if recipes == nil {
+		http.Error(w, "404 No recipe with Ingredient found", http.StatusNotFound)
+		return
+	}
+	sendJson(w, recipes)
+}
