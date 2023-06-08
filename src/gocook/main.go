@@ -19,15 +19,15 @@ func main() {
 	log.Printf("Starting Server")
 	router := mux.NewRouter()
 
-	//Recipe routes
-	router.HandleFunc("/recipe", handler.CreateRecipe).Methods("POST")
-	router.HandleFunc("/recipe/{id}", handler.GetRecipe).Methods("GET")
-	router.HandleFunc("/recipe/{id}", handler.UpdateRecipe).Methods("PUT")
-	router.HandleFunc("/recipe/{id}", handler.DeleteRecipe).Methods("DELETE")
-	router.HandleFunc("/recipes", handler.GetRecipes).Methods("GET")
+	//Recipe routes (private as user must be logged in to access)
+	router.HandleFunc("/recipe", verifyJWT(handler.CreateRecipe)).Methods("POST")
+	router.HandleFunc("/recipe/{id}", verifyJWT(handler.GetRecipe)).Methods("GET")
+	router.HandleFunc("/recipe/{id}", verifyJWT(handler.UpdateRecipe)).Methods("PUT")
+	router.HandleFunc("/recipe/{id}", verifyJWT(handler.DeleteRecipe)).Methods("DELETE")
+	router.HandleFunc("/recipes", verifyJWT(handler.GetRecipes)).Methods("GET")
 	router.HandleFunc("/recipes/{ingredient}", handler.GetRecipesByIngredient).Methods("GET")
 
-	//Rating route
+	//Rating route (private as user must be logged in to access)
 	router.HandleFunc("/recipe/{id}/rating", handler.AddRating).Methods("POST")
 
 	//User routes
