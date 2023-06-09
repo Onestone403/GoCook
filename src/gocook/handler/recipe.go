@@ -24,7 +24,7 @@ func CreateRecipe(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	if err := service.CreateRecipe(recipe); err != nil {
+	if err := service.CreateRecipe(r.Context(), recipe); err != nil {
 		log.Printf("Error calling service CreateRecipe: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -42,7 +42,7 @@ func GetRecipe(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	recipe, err := service.GetRecipe(id)
+	recipe, err := service.GetRecipe(r.Context(), id)
 	if err != nil {
 		log.Printf("Failure retrieving recipe with ID %v: %v", id, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -66,7 +66,7 @@ func UpdateRecipe(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	recipe, err = service.UpdateRecipe(id, recipe)
+	recipe, err = service.UpdateRecipe(r.Context(), id, recipe)
 	if err != nil {
 		log.Printf("Failure updating campaign with ID %v: %v", id, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -85,7 +85,7 @@ func DeleteRecipe(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	recipe, err := service.DeleteRecipe(id)
+	recipe, err := service.DeleteRecipe(r.Context(), id)
 	if err != nil {
 		log.Printf("Failure deleting recipe with ID %v: %v", id, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -99,7 +99,7 @@ func DeleteRecipe(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetRecipes(w http.ResponseWriter, r *http.Request) {
-	recipes, err := service.GetRecipes()
+	recipes, err := service.GetRecipes(r.Context())
 	if err != nil {
 		log.Printf("Failure retrieving recipes: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -118,7 +118,7 @@ func GetRecipesByIngredient(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	recipes, err := service.GetRecipesByIngredient(ingredient)
+	recipes, err := service.GetRecipesByIngredient(r.Context(), ingredient)
 	if err != nil {
 		log.Printf("Failure retrieving recipes: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)

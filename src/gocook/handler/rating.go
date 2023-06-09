@@ -19,8 +19,7 @@ func AddRating(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	//TODO get user id from header
-	if err := service.AddRating(recipeId, rating); err != nil {
+	if err := service.AddRating(r.Context(), recipeId, rating); err != nil {
 		log.Printf("Failure adding donation to campaign with ID %v: %v", recipeId, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

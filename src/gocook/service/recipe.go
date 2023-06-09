@@ -3,6 +3,7 @@ package service
 import (
 	"GoCook/db"
 	"GoCook/model"
+	"context"
 	"log"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -18,8 +19,9 @@ func init() {
 	recipeStore = make(map[uint]*model.Recipe)
 }
 
-func CreateRecipe(recipe *model.Recipe) error {
-	insertResult, err := db.RecipeCollection.InsertOne(db.Ctx, recipe)
+func CreateRecipe(ctx context.Context, recipe *model.Recipe) error {
+	log.Printf("getting user from context:%v ", ctx.Value("userID"))
+	insertResult, err := db.RecipeCollection.InsertOne(ctx, recipe)
 	if err != nil {
 		log.Printf("Could not store new recipe in database: %v", err)
 	}
@@ -28,28 +30,28 @@ func CreateRecipe(recipe *model.Recipe) error {
 	return nil
 }
 
-func GetRecipe(id primitive.ObjectID) (*model.Recipe, error) {
+func GetRecipe(ctx context.Context, id primitive.ObjectID) (*model.Recipe, error) {
 	var recipe *model.Recipe
-	err := db.RecipeCollection.FindOne(db.Ctx, bson.M{"_id": id}).Decode(&recipe)
+	err := db.RecipeCollection.FindOne(ctx, bson.M{"_id": id}).Decode(&recipe)
 	if err != nil {
 		return nil, nil
 	}
 	return recipe, nil
 }
 
-func UpdateRecipe(id primitive.ObjectID, recipe *model.Recipe) (*model.Recipe, error) {
-	existingRecipe, err := GetRecipe(id)
+func UpdateRecipe(ctx context.Context, id primitive.ObjectID, recipe *model.Recipe) (*model.Recipe, error) {
+	existingRecipe, err := GetRecipe(ctx, id)
 	if existingRecipe == nil || err != nil {
 		return existingRecipe, err
 	}
 	existingRecipe.Name = recipe.Name
 	existingRecipe.Ingredients = recipe.Ingredients
-	db.RecipeCollection.UpdateOne(db.Ctx, bson.M{"_id": id}, bson.M{"$set": bson.M{"name": recipe.Name, "ingredients": recipe.Ingredients}})
+	db.RecipeCollection.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": bson.M{"name": recipe.Name, "ingredients": recipe.Ingredients}})
 	return existingRecipe, nil
 }
 
-func DeleteRecipe(id primitive.ObjectID) (*model.Recipe, error) {
-	recipe, err := GetRecipe(id)
+func DeleteRecipe(ctx context.Context, id primitive.ObjectID) (*model.Recipe, error) {
+	recipe, err := GetRecipe(ctx, id)
 	if recipe == nil || err != nil {
 		return recipe, err
 	}
@@ -57,33 +59,28 @@ func DeleteRecipe(id primitive.ObjectID) (*model.Recipe, error) {
 	return recipe, nil
 }
 
-func GetRecipes() ([]*model.Recipe, error) {
-	// recipes := make([]*model.Recipe, 0, len(recipeStore))
-	// for _, recipe := range recipeStore {
-	// 	recipes = append(recipes, recipe)
-	// }
-
+func GetRecipes(ctx context.Context) ([]*model.Recipe, error) {
 	var recipes []*model.Recipe
-	recipeCursor, err := db.RecipeCollection.Find(db.Ctx, bson.M{})
+	recipeCursor, err := db.RecipeCollection.Find(ctx, bson.M{})
 	if err != nil {
 		panic(err)
 	}
 
-	if err = recipeCursor.All(db.Ctx, &recipes); err != nil {
+	if err = recipeCursor.All(ctx, &recipes); err != nil {
 		panic(err)
 	}
 
 	return recipes, nil
 }
 
-func GetRecipesByIngredient(ingredient string) ([]*model.Recipe, error) {
+func GetRecipesByIngredient(ctx context.Context, ingredient string) ([]*model.Recipe, error) {
 	var recipes []*model.Recipe
-	recipeCursor, err := db.RecipeCollection.Find(db.Ctx, bson.M{"ingredients.name": ingredient})
+	recipeCursor, err := db.RecipeCollection.Find(ctx, bson.M{"ingredients.name": ingredient})
 	if err != nil {
 		panic(err)
 	}
 
-	if err = recipeCursor.All(db.Ctx, &recipes); err != nil {
+	if err = recipeCursor.All(ctx, &recipes); err != nil {
 		panic(err)
 	}
 

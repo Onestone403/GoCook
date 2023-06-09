@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/golang-jwt/jwt"
@@ -12,7 +13,8 @@ func verifyJWT(endpointHandler func(writer http.ResponseWriter, request *http.Re
 
 	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		if request.Header["Token"] != nil {
-			token, err := jwt.Parse(request.Header["Token"][0], func(token *jwt.Token) (interface{}, error) {
+			claims := jwt.MapClaims{}
+			token, err := jwt.ParseWithClaims(request.Header["Token"][0], claims, func(token *jwt.Token) (interface{}, error) {
 				_, ok := token.Method.(*jwt.SigningMethodHMAC)
 				if !ok {
 					writer.WriteHeader(http.StatusUnauthorized)
@@ -33,7 +35,9 @@ func verifyJWT(endpointHandler func(writer http.ResponseWriter, request *http.Re
 				return
 			}
 			if token.Valid {
-				endpointHandler(writer, request)
+				//Get User from Token an pass it as context to handler
+				ctx := context.WithValue(request.Context(), "userID", claims["userID"])
+				endpointHandler(writer, request.WithContext(ctx))
 			} else {
 				writer.WriteHeader(http.StatusUnauthorized)
 				_, err := writer.Write([]byte("You're Unauthorized due to invalid token"))

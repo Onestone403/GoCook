@@ -10,7 +10,6 @@ import (
 
 var RecipeCollection *mongo.Collection
 var goCookDatabase *mongo.Database
-var Ctx = context.TODO()
 
 func Init() {
 	log.Println("Init MongoDB!")
@@ -20,7 +19,7 @@ func Init() {
 		log.Fatal(err)
 	}
 	log.Println(client)
-	err = client.Ping(Ctx, nil)
+	err = client.Ping(context.TODO(), nil)
 	if err != nil {
 		log.Fatal(err)
 	}

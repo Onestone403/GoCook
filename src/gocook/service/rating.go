@@ -3,6 +3,7 @@ package service
 import (
 	"GoCook/db"
 	"GoCook/model"
+	"context"
 	"errors"
 	"log"
 
@@ -10,12 +11,12 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func AddRating(recipeId primitive.ObjectID, rating *model.Rating) error {
-	recipe, err := GetRecipe(recipeId)
+func AddRating(ctx context.Context, recipeId primitive.ObjectID, rating *model.Rating) error {
+	recipe, err := GetRecipe(ctx, recipeId)
 	if err != nil {
 		return err
 	}
-	//Check if user already rated
+	//TODO verify by OPA
 	if recipe.Ratings != nil {
 		for _, r := range recipe.Ratings {
 			if r.UserID == rating.UserID {
@@ -24,7 +25,7 @@ func AddRating(recipeId primitive.ObjectID, rating *model.Rating) error {
 			}
 		}
 	}
-	db.RecipeCollection.UpdateOne(db.Ctx, bson.M{"_id": recipeId}, bson.M{"$push": bson.M{"ratings": rating}})
+	db.RecipeCollection.UpdateOne(ctx, bson.M{"_id": recipeId}, bson.M{"$push": bson.M{"ratings": rating}})
 	return nil
 
 }

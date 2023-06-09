@@ -25,7 +25,7 @@ func main() {
 	router.HandleFunc("/recipe/{id}", verifyJWT(handler.UpdateRecipe)).Methods("PUT")
 	router.HandleFunc("/recipe/{id}", verifyJWT(handler.DeleteRecipe)).Methods("DELETE")
 	router.HandleFunc("/recipes", verifyJWT(handler.GetRecipes)).Methods("GET")
-	router.HandleFunc("/recipes/{ingredient}", handler.GetRecipesByIngredient).Methods("GET")
+	router.HandleFunc("/recipes/{ingredient}", verifyJWT(handler.GetRecipesByIngredient)).Methods("GET")
 
 	//Rating route (private as user must be logged in to access)
 	router.HandleFunc("/recipe/{id}/rating", handler.AddRating).Methods("POST")
