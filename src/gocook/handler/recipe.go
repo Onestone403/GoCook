@@ -8,16 +8,6 @@ import (
 	"net/http"
 )
 
-func getRecipeFromRequest(r *http.Request) (*model.Recipe, error) {
-	var recipe model.Recipe
-	err := json.NewDecoder(r.Body).Decode(&recipe)
-	if err != nil {
-		log.Printf("Can't decode request body to recipe struct: %v", err)
-		return nil, err
-	}
-	return &recipe, nil
-}
-
 func CreateRecipe(w http.ResponseWriter, r *http.Request) {
 	recipe, err := getRecipeFromRequest(r)
 	if err != nil {
@@ -68,7 +58,7 @@ func UpdateRecipe(w http.ResponseWriter, r *http.Request) {
 	}
 	recipe, err = service.UpdateRecipe(r.Context(), id, recipe)
 	if err != nil {
-		log.Printf("Failure updating campaign with ID %v: %v", id, err)
+		log.Printf("Failure updating recipe with ID %v: %v", id, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -129,4 +119,14 @@ func GetRecipesByIngredient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	sendJson(w, recipes)
+}
+
+func getRecipeFromRequest(r *http.Request) (*model.Recipe, error) {
+	var recipe model.Recipe
+	err := json.NewDecoder(r.Body).Decode(&recipe)
+	if err != nil {
+		log.Printf("Can't decode request body to recipe struct: %v", err)
+		return nil, err
+	}
+	return &recipe, nil
 }

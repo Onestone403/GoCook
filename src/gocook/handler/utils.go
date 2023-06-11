@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 
@@ -29,5 +30,9 @@ func getId(r *http.Request) (primitive.ObjectID, error) {
 func getIngredient(r *http.Request) (string, error) {
 	vars := mux.Vars(r)
 	ingredient := vars["ingredient"]
+	if len([]rune(ingredient)) < 3 {
+		log.Printf("Ingredient from request not a valid ingredient!")
+		return ingredient, errors.New("Ingredient from request not a valid ingredient! At least 3 characters required")
+	}
 	return ingredient, nil
 }
