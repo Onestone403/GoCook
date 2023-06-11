@@ -9,6 +9,7 @@ import (
 )
 
 var RecipeCollection *mongo.Collection
+var UserCollection *mongo.Collection
 var goCookDatabase *mongo.Database
 
 func Init() {
@@ -27,4 +28,5 @@ func Init() {
 
 	goCookDatabase = client.Database("gocook")
 	RecipeCollection = goCookDatabase.Collection("recipes")
+	UserCollection = goCookDatabase.Collection("users")
 }
