@@ -7,8 +7,11 @@ require (
 	go.mongodb.org/mongo-driver v1.11.6
 )
 
+require golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
+
 require (
-	github.com/golang-jwt/jwt v3.2.2+incompatible //indirect
+	github.com/go-resty/resty/v2 v2.7.0
+	github.com/golang-jwt/jwt v3.2.2+incompatible 
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
 	github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe // indirect

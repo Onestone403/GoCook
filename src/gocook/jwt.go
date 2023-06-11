@@ -2,7 +2,9 @@ package main
 
 import (
 	"context"
+	"log"
 	"net/http"
+	"strings"
 
 	"github.com/golang-jwt/jwt"
 )
@@ -28,6 +30,7 @@ func verifyJWT(endpointHandler func(writer http.ResponseWriter, request *http.Re
 			})
 			if err != nil {
 				writer.WriteHeader(http.StatusUnauthorized)
+				log.Printf("Error parsing JWT: %v", err)
 				_, err2 := writer.Write([]byte("You're Unauthorized due to error parsing the JWT"))
 				if err2 != nil {
 					return
@@ -35,8 +38,10 @@ func verifyJWT(endpointHandler func(writer http.ResponseWriter, request *http.Re
 				return
 			}
 			if token.Valid {
-				//Get User from Token an pass it as context to handler
+				//Populate Context with relevant data
 				ctx := context.WithValue(request.Context(), "userID", claims["userID"])
+				ctx = context.WithValue(ctx, "path", strings.Split(strings.Trim(request.URL.Path, "/"), "/"))
+				ctx = context.WithValue(ctx, "method", request.Method)
 				endpointHandler(writer, request.WithContext(ctx))
 			} else {
 				writer.WriteHeader(http.StatusUnauthorized)

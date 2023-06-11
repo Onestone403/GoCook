@@ -1,9 +1,11 @@
 package service
 
 import (
+	authorization "GoCook/authorization"
 	"GoCook/db"
 	"GoCook/model"
 	"context"
+	"errors"
 	"log"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -20,7 +22,20 @@ func init() {
 }
 
 func CreateRecipe(ctx context.Context, recipe *model.Recipe) error {
-	log.Printf("getting user from context:%v ", ctx.Value("userID"))
+
+	decisionRequest, err := PrepareDecsisionRequest(ctx, recipe)
+	log.Printf("DecisionRequest: %v", decisionRequest)
+	if err != nil {
+		return err
+	}
+	allowed, err := authorization.New().IsAllowed(decisionRequest)
+	log.Printf("Allowed: %v", allowed)
+	if err != nil {
+		return err
+	}
+	if !allowed {
+		return errors.New("Not allowed to create recipe")
+	}
 	insertResult, err := db.RecipeCollection.InsertOne(ctx, recipe)
 	if err != nil {
 		log.Printf("Could not store new recipe in database: %v", err)
