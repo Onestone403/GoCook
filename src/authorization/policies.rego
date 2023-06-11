@@ -30,9 +30,9 @@ allow {
 #A recipe can only be rated once by a user
 allow {
     input.method == "POST"
-    input.path = ["recipe",input.recipe._id,"rating"]
+    input.path = ["recipe",input.recipe.ID,"rating"]
     input.user.IsCook == false
-    every rating in input.recipe.ratings{
+    every rating in input.recipe.Ratings{
     rating.userID != input.user.ID
     }
     

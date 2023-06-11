@@ -1,6 +1,7 @@
 package service
 
 import (
+	authorization "GoCook/authorization"
 	"GoCook/db"
 	"GoCook/model"
 	"context"
@@ -11,21 +12,35 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func AddRating(ctx context.Context, recipeId primitive.ObjectID, rating *model.Rating) error {
-	recipe, err := GetRecipe(ctx, recipeId)
+func AddRating(ctx context.Context, recipeId primitive.ObjectID, rating *model.Rating) (*model.Rating, error) {
+	recipteToRate, err := GetRecipe(ctx, recipeId)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	//TODO verify by OPA
-	if recipe.Ratings != nil {
-		for _, r := range recipe.Ratings {
-			if r.UserID == rating.UserID {
-				log.Printf("User already rated this recipe")
-				return errors.New("User already rated this recipe")
-			}
-		}
+	user, err := GetUserByID(ctx)
+	if err != nil {
+		return nil, err
 	}
-	db.RecipeCollection.UpdateOne(ctx, bson.M{"_id": recipeId}, bson.M{"$push": bson.M{"ratings": rating}})
-	return nil
+	rating.UserID = user.ID
+	decisionRequest, err := PrepareDecsisionRequest(ctx, recipteToRate)
+	if err != nil {
+		return nil, err
+	}
+	allowed, err := authorization.New().IsAllowed(decisionRequest)
+	if err != nil {
+		log.Printf("Error while checking authorization: %v", err)
+		return nil, err
+	}
+	if !allowed {
+		log.Printf("Not authorized to add a rating")
+		return nil, errors.New("Not authorized to add a rating")
+	}
+	_, err = db.RecipeCollection.UpdateOne(ctx, bson.M{"_id": recipeId}, bson.M{"$push": bson.M{"ratings": rating}})
+	if err != nil {
+		log.Printf("Error while updating recipe: %v", err)
+		return nil, err
+	}
+	log.Printf("Successfully added rating to recipe: %v", recipteToRate.Name)
+	return rating, nil
 
 }

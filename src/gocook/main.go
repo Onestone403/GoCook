@@ -28,7 +28,7 @@ func main() {
 	router.HandleFunc("/recipes/{ingredient}", verifyJWT(handler.GetRecipesByIngredient)).Methods("GET")
 
 	//Rating route (private as user must be logged in to access)
-	router.HandleFunc("/recipe/{id}/rating", handler.AddRating).Methods("POST")
+	router.HandleFunc("/recipe/{id}/rating", verifyJWT(handler.AddRating)).Methods("POST")
 
 	//User routes
 

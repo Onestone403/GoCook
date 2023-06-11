@@ -19,13 +19,13 @@ func AddRating(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	if err := service.AddRating(r.Context(), recipeId, rating); err != nil {
-		log.Printf("Failure adding donation to campaign with ID %v: %v", recipeId, err)
+	rating, err = service.AddRating(r.Context(), recipeId, rating)
+	if err != nil {
+		log.Printf("Failure adding rating to recipe with ID %v: %v", recipeId, err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	sendJson(w, rating)
-
 }
 
 func getRatingFromRequest(r *http.Request) (*model.Rating, error) {
