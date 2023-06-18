@@ -1,12 +1,13 @@
 package service
 
 import (
-	authorization "GoCook/authorization"
-	"GoCook/db"
-	"GoCook/model"
 	"context"
 	"errors"
-	"log"
+	authorization "gocook/authorization"
+	"gocook/db"
+	"gocook/model"
+
+	log "github.com/sirupsen/logrus"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -28,19 +29,23 @@ func CreateRecipe(ctx context.Context, recipe *model.Recipe) error {
 	}
 	allowed, err := authorization.New().IsAllowed(decisionRequest)
 	if err != nil {
-		log.Printf("Error while checking authorization: %v", err)
+		log.Errorf("Error while checking authorization: %v", err)
 		return err
 	}
 	if !allowed {
-		log.Printf("Not authorized to create recipe")
+		entry := log.WithFields(log.Fields{
+			"recipe": recipe,
+			"user":   decisionRequest.User,
+		})
+		entry.Warn("Not authorized to create recipe")
 		return errors.New("Not authorized to create recipe")
 	}
 	insertResult, err := db.RecipeCollection.InsertOne(ctx, recipe)
 	if err != nil {
-		log.Printf("Could not store new recipe in database: %v", err)
+		log.Errorf("Could not store new recipe in database: %v", err)
 		return errors.New("Could not store new recipe in database")
 	}
-	log.Printf("Successfully stored new recipe with ID %v in database", insertResult.InsertedID)
+	log.Infof("Successfully stored new recipe with ID %v in database", insertResult.InsertedID)
 	recipe.ID = insertResult.InsertedID.(primitive.ObjectID)
 	return nil
 }
@@ -49,7 +54,7 @@ func GetRecipe(ctx context.Context, id primitive.ObjectID) (*model.Recipe, error
 	var recipe *model.Recipe
 	err := db.RecipeCollection.FindOne(ctx, bson.M{"_id": id}).Decode(&recipe)
 	if err != nil {
-		log.Printf("Could not find recipe with ID %v in database: %v", id, err)
+		log.Errorf("Could not find recipe with ID %v in database: %v", id, err)
 		return nil, nil
 	}
 	return recipe, nil
@@ -68,26 +73,30 @@ func UpdateRecipe(ctx context.Context, id primitive.ObjectID, recipe *model.Reci
 	}
 	allowed, err := authorization.New().IsAllowed(decisionRequest)
 	if err != nil {
-		log.Printf("Error while checking authorization: %v", err)
+		log.Errorf("Error while checking authorization: %v", err)
 		return nil, err
 	}
 	if !allowed {
-		log.Printf("Not authorized to change the recipe")
+		entry := log.WithFields(log.Fields{
+			"recipe": existingRecipe,
+			"user":   decisionRequest.User,
+		})
+		entry.Warn("Not authorized to change the recipe")
 		return nil, errors.New("Not authorized to change the recipe")
 	}
 	_, err = db.RecipeCollection.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": bson.M{"name": recipe.Name, "ingredients": recipe.Ingredients}})
 	if err != nil {
-		log.Printf("Could not update recipe %s in database: %v", existingRecipe.Name, err)
+		log.Errorf("Could not update recipe %s in database: %v", existingRecipe.Name, err)
 		return nil, err
 	}
-	log.Printf("Successfully updated recipe %s in database", existingRecipe.Name)
+	log.Infof("Successfully updated recipe %s in database", existingRecipe.Name)
 	return existingRecipe, nil
 }
 
 func DeleteRecipe(ctx context.Context, id primitive.ObjectID) (*model.Recipe, error) {
 	existingRecipe, err := GetRecipe(ctx, id)
 	if existingRecipe == nil || err != nil {
-		log.Printf("Could not find recipe with ID %v in database", id)
+		log.Errorf("Could not find recipe with ID %v in database", id)
 		return nil, err
 	}
 	decisionRequest, err := PrepareDecsisionRequest(ctx, existingRecipe)
@@ -96,19 +105,23 @@ func DeleteRecipe(ctx context.Context, id primitive.ObjectID) (*model.Recipe, er
 	}
 	allowed, err := authorization.New().IsAllowed(decisionRequest)
 	if err != nil {
-		log.Printf("Error while checking authorization: %v", err)
+		log.Errorf("Error while checking authorization: %v", err)
 		return nil, err
 	}
 	if !allowed {
-		log.Printf("Not authorized to delete the recipe")
+		entry := log.WithFields(log.Fields{
+			"recipe": existingRecipe,
+			"user":   decisionRequest.User,
+		})
+		entry.Warn("Not authorized to delete the recipe")
 		return nil, errors.New("Not authorized to delete the recipe")
 	}
 	_, err = db.RecipeCollection.DeleteOne(ctx, bson.M{"_id": id})
 	if err != nil {
-		log.Printf("Could not delete recipe %s from database: %v", existingRecipe.Name, err)
+		log.Errorf("Could not delete recipe %s from database: %v", existingRecipe.Name, err)
 		return nil, err
 	}
-	log.Printf("Successfully deleted recipe %s from database", existingRecipe.Name)
+	log.Infof("Successfully deleted recipe %s from database", existingRecipe.Name)
 	return existingRecipe, nil
 }
 
@@ -130,11 +143,11 @@ func GetRecipesByIngredient(ctx context.Context, ingredient string) ([]*model.Re
 	var recipes []*model.Recipe
 	recipeCursor, err := db.RecipeCollection.Find(ctx, bson.M{"ingredients.name": ingredient})
 	if err != nil {
-		log.Printf("Could not find recipes with ingredient %s in database", ingredient)
+		log.Error("Could not find recipes with ingredient %s in database", ingredient)
 		return nil, err
 	}
 	if err = recipeCursor.All(ctx, &recipes); err != nil {
-		log.Printf("Could not retrieve recipes from cursor: %v", err)
+		log.Error("Could not retrieve recipes from cursor: %v", err)
 		return nil, err
 	}
 	return recipes, nil

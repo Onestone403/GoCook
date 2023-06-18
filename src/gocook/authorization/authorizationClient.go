@@ -1,8 +1,9 @@
 package authorization
 
 import (
-	"GoCook/model"
 	"encoding/json"
+	"gocook/model"
+	"os"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -17,10 +18,10 @@ type decision struct {
 }
 
 type DecisionRequest struct {
-	Method string       `json:"method"`
-	Path   []string     `json:"path"`
-	User   model.User   `json:"user"`
-	Recipe model.Recipe `json:"recipe"`
+	Method    string      `json:"method"`
+	Path      []string    `json:"path"`
+	User      model.User  `json:"user"`
+	Ressource interface{} `json:"ressource"`
 }
 
 type decisionReqInternal struct {
@@ -44,7 +45,7 @@ type config struct {
 func New() Client {
 	return &client{
 		restClient: resty.New(),
-		endpoint:   "http://127.0.0.1:8181/v1/data/authz",
+		endpoint:   os.Getenv("OPA_URI"), //"http://127.0.0.1:8181/v1/data/authz",
 	}
 }
 

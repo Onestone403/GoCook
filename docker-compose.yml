@@ -1,4 +1,23 @@
 services:
+  gocook:
+    build:
+      context: ./src
+      dockerfile: gocook/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      MONGODB_URI: mongodb://mongodb-gocook:27017/gocook
+      OPA_URI: http://opa:8181/v1/data/authz
+      LOG_LEVEL: info
+    depends_on:
+      - mongodb-gocook
+  mongodb-gocook:
+    image: mongo:4.4.6
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./src/gocook/scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
   opa:
     image: openpolicyagent/opa:0.38.0-rootless
     ports:

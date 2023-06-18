@@ -2,7 +2,9 @@ package db
 
 import (
 	"context"
-	"log"
+	"os"
+
+	log "github.com/sirupsen/logrus"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -10,11 +12,12 @@ import (
 
 var RecipeCollection *mongo.Collection
 var UserCollection *mongo.Collection
+var ShoppingListCollection *mongo.Collection
 var goCookDatabase *mongo.Database
 
 func Init() {
-	log.Println("Init MongoDB!")
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+	log.Info("Init MongoDB!")
+	clientOptions := options.Client().ApplyURI(os.Getenv("MONGODB_URI"))
 	client, err := mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
 		log.Fatal(err)
@@ -24,9 +27,10 @@ func Init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("Connected to MongoDB!")
+	log.Info("Connected to MongoDB!")
 
 	goCookDatabase = client.Database("gocook")
 	RecipeCollection = goCookDatabase.Collection("recipes")
 	UserCollection = goCookDatabase.Collection("users")
+	ShoppingListCollection = goCookDatabase.Collection("shoppingLists")
 }

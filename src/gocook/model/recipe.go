@@ -6,6 +6,6 @@ type Recipe struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty"`
 	Name        string             `bson:"name"`
 	Ingredients []Ingredient       `bson:"ingredients"`
-	CookID      primitive.ObjectID `bson:"cookId"`
+	CookID      primitive.ObjectID `bson:"cookID"`
 	Ratings     []Rating           `bson:"ratings,omitempty"`
 }
