@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
 	"gocook/db"
 	"gocook/model"
 
@@ -26,6 +27,7 @@ func GetUserByID(ctx context.Context) (*model.User, error) {
 	}
 	err = db.UserCollection.FindOne(ctx, bson.M{"_id": userID}).Decode(&user)
 	if err != nil {
+		fmt.Print(userID)
 		log.Errorf("Error getting user from database:%v ", err)
 		return nil, errors.New("User doesn't exist")
 	}

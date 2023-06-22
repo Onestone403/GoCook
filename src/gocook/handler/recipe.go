@@ -24,7 +24,9 @@ func CreateRecipe(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(recipe); err != nil {
 		log.Errorf("Failure encoding value to JSON: %v", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
+	sendJson(w, recipe)
 }
 
 func GetRecipe(w http.ResponseWriter, r *http.Request) {
