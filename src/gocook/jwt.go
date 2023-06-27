@@ -10,6 +10,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
+// dummy secret for developement purpose, use a real secret in production
 var secret = []byte("test")
 
 func verifyJWT(endpointHandler func(writer http.ResponseWriter, request *http.Request)) http.HandlerFunc {
