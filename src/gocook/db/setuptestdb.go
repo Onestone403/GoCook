@@ -100,8 +100,8 @@ func initTestDatabase() error {
 		},
 		bson.M{
 			"_id":       id3,
-			"firstName": "Mark",
-			"lastName":  "Zuckerberg",
+			"firstName": "Warren",
+			"lastName":  "Buffet",
 			"isCook":    true,
 		},
 	})

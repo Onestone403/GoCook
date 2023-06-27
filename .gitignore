@@ -2,5 +2,3 @@
 *.pptx
 #Exclude local MongoDB files
 localMongoDB/*
-#Exclude Postman files
-Postman/*

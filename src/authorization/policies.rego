@@ -32,6 +32,7 @@ allow {
     input.method == "POST"
     input.path = ["recipe",input.ressource.ID,"rating"]
     input.user.IsCook == false
+    #input.ressource.CookID != input.user.ID
     every rating in input.ressource.Ratings{
     rating.UserID != input.user.ID
     }

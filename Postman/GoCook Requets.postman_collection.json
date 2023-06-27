@@ -1,0 +1,536 @@
+{
+	"info": {
+		"_postman_id": "7b76e35f-ed0d-4466-810d-6f6e933fca39",
+		"name": "GoCook Requets",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Recipes",
+			"item": [
+				{
+					"name": "CreateRecipe",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEifQ.JEsQCnVIJ-mKbflxxAGfIBOwaCDZJ_d3y-dQfN23i8k",
+								"description": "Tim Koch",
+								"type": "default"
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIifQ.En-7KYX9aVv_iwKl_iEJlHKbGAiQoS0X38D-EQ4E8tQ",
+								"description": "Elon Muskat",
+								"type": "default",
+								"disabled": true
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDMifQ.qmx8c5k4MVhXcXteH_x0rmfoJ2vxJ2u9kkewGv2BdaA",
+								"description": "Warren Buffet",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\":\"Pommes\",\"ingredients\":[{\"name\":\"Potato\",\"neededAmount\":2.0,\"unit\":\"KILOGRAMS\"},\n{\"name\":\"FryFat\",\"neededAmount\":4.0,\"unit\":\"LITER\"}],\"CookId\":\"000000000000000000000001\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/recipe",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"recipe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetRecipeById",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEifQ.JEsQCnVIJ-mKbflxxAGfIBOwaCDZJ_d3y-dQfN23i8k",
+								"description": "Tim Koch",
+								"type": "default"
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIifQ.En-7KYX9aVv_iwKl_iEJlHKbGAiQoS0X38D-EQ4E8tQ",
+								"description": "Elon Muskat",
+								"type": "default"
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDMifQ.qmx8c5k4MVhXcXteH_x0rmfoJ2vxJ2u9kkewGv2BdaA",
+								"description": "Warren Buffet",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/recipe/648c46509e421e8c0be4cb74",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"recipe",
+								"648c46509e421e8c0be4cb74"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateRecipe",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEifQ.JEsQCnVIJ-mKbflxxAGfIBOwaCDZJ_d3y-dQfN23i8k",
+								"description": "Tim Koch",
+								"type": "default"
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIifQ.En-7KYX9aVv_iwKl_iEJlHKbGAiQoS0X38D-EQ4E8tQ",
+								"description": "Elon Muskat",
+								"type": "default",
+								"disabled": true
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDMifQ.qmx8c5k4MVhXcXteH_x0rmfoJ2vxJ2u9kkewGv2BdaA",
+								"description": "Warren Buffet",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\":\"Pommes Frites XXL\",\"ingredients\":[{\"name\":\"Potato\",\"neededAmount\":4,\"unit\":\"KILOGRAMS\"},\n{\"name\":\"FryFat\",\"neededAmount\":4.0,\"unit\":\"LITER\"}]}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/recipe/648e577279d196b35c7d991d",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"recipe",
+								"648e577279d196b35c7d991d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllRecipes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEifQ.JEsQCnVIJ-mKbflxxAGfIBOwaCDZJ_d3y-dQfN23i8k",
+								"description": "Tim Koch",
+								"type": "default"
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIifQ.En-7KYX9aVv_iwKl_iEJlHKbGAiQoS0X38D-EQ4E8tQ",
+								"description": "Elon Muskat",
+								"type": "default",
+								"disabled": true
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDMifQ.qmx8c5k4MVhXcXteH_x0rmfoJ2vxJ2u9kkewGv2BdaA",
+								"description": "Warren Buffet",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/recipes",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"recipes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetRecipesByIngredient",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEifQ.JEsQCnVIJ-mKbflxxAGfIBOwaCDZJ_d3y-dQfN23i8k",
+								"description": "Tim Koch",
+								"type": "default",
+								"disabled": true
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIifQ.En-7KYX9aVv_iwKl_iEJlHKbGAiQoS0X38D-EQ4E8tQ",
+								"description": "Elon Muskat",
+								"type": "default"
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDMifQ.qmx8c5k4MVhXcXteH_x0rmfoJ2vxJ2u9kkewGv2BdaA",
+								"description": "Warren Buffet",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/recipes?ingredient=Apple",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"recipes"
+							],
+							"query": [
+								{
+									"key": "ingredient",
+									"value": "Apple"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteRecipeById",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEifQ.JEsQCnVIJ-mKbflxxAGfIBOwaCDZJ_d3y-dQfN23i8k",
+								"description": "Tim Koch",
+								"type": "default"
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIifQ.En-7KYX9aVv_iwKl_iEJlHKbGAiQoS0X38D-EQ4E8tQ",
+								"description": "Elon Muskat",
+								"type": "default",
+								"disabled": true
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDMifQ.qmx8c5k4MVhXcXteH_x0rmfoJ2vxJ2u9kkewGv2BdaA",
+								"description": "Warren Buffet",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/recipe/648e577279d196b35c7d991d",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"recipe",
+								"648e577279d196b35c7d991d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddRating",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEifQ.JEsQCnVIJ-mKbflxxAGfIBOwaCDZJ_d3y-dQfN23i8k",
+								"description": "Tim Koch",
+								"type": "default",
+								"disabled": true
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIifQ.En-7KYX9aVv_iwKl_iEJlHKbGAiQoS0X38D-EQ4E8tQ",
+								"description": "Elon Musk",
+								"type": "default",
+								"disabled": true
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDMifQ.qmx8c5k4MVhXcXteH_x0rmfoJ2vxJ2u9kkewGv2BdaA",
+								"description": "Warren Buffet",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"score\":2, \"comment\":\"Delicious like hell!\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/recipe/64899dcd72c1b829d5d412b1/rating",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"recipe",
+								"64899dcd72c1b829d5d412b1",
+								"rating"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ShoppingList",
+			"item": [
+				{
+					"name": "CreateShoppingList",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEifQ.JEsQCnVIJ-mKbflxxAGfIBOwaCDZJ_d3y-dQfN23i8k",
+								"description": "Tim Koch",
+								"type": "default"
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIifQ.En-7KYX9aVv_iwKl_iEJlHKbGAiQoS0X38D-EQ4E8tQ",
+								"description": "Elon Muskat",
+								"type": "default"
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDMifQ.qmx8c5k4MVhXcXteH_x0rmfoJ2vxJ2u9kkewGv2BdaA",
+								"description": "Warren Buffet",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/shoppingList?title=Weekly",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"shoppingList"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "Weekly"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetShoppingList",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEifQ.JEsQCnVIJ-mKbflxxAGfIBOwaCDZJ_d3y-dQfN23i8k",
+								"description": "Tim Koch",
+								"type": "default"
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIifQ.En-7KYX9aVv_iwKl_iEJlHKbGAiQoS0X38D-EQ4E8tQ",
+								"description": "Elon Muskat",
+								"type": "default"
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDMifQ.qmx8c5k4MVhXcXteH_x0rmfoJ2vxJ2u9kkewGv2BdaA",
+								"description": "Warren Buffet",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/shoppingList/649418252e88c2338940fbbe",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"shoppingList",
+								"649418252e88c2338940fbbe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetShoppingLists",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEifQ.JEsQCnVIJ-mKbflxxAGfIBOwaCDZJ_d3y-dQfN23i8k",
+								"description": "Tim Koch",
+								"type": "default"
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIifQ.En-7KYX9aVv_iwKl_iEJlHKbGAiQoS0X38D-EQ4E8tQ",
+								"description": "Elon Muskat",
+								"type": "default",
+								"disabled": true
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDMifQ.qmx8c5k4MVhXcXteH_x0rmfoJ2vxJ2u9kkewGv2BdaA",
+								"description": "Warren Buffet",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/shoppingLists",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"shoppingLists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteShoppingList",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEifQ.JEsQCnVIJ-mKbflxxAGfIBOwaCDZJ_d3y-dQfN23i8k",
+								"description": "Tim Koch",
+								"type": "default"
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIifQ.En-7KYX9aVv_iwKl_iEJlHKbGAiQoS0X38D-EQ4E8tQ",
+								"description": "Elon Muskat",
+								"type": "default",
+								"disabled": true
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDMifQ.qmx8c5k4MVhXcXteH_x0rmfoJ2vxJ2u9kkewGv2BdaA",
+								"description": "Warren Buffet",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "localhost:8000/shoppingList/648e50ade713a2eb82885199",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"shoppingList",
+								"648e50ade713a2eb82885199"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddIngredient",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDEifQ.JEsQCnVIJ-mKbflxxAGfIBOwaCDZJ_d3y-dQfN23i8k",
+								"description": "Tim Koch",
+								"type": "default"
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDIifQ.En-7KYX9aVv_iwKl_iEJlHKbGAiQoS0X38D-EQ4E8tQ",
+								"description": "Elon Muskat",
+								"type": "default",
+								"disabled": true
+							},
+							{
+								"key": "Token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDMifQ.qmx8c5k4MVhXcXteH_x0rmfoJ2vxJ2u9kkewGv2BdaA",
+								"description": "Warren Buffet",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "            {\n                \"Name\": \"Apple\",\n                \"NeededAmount\": 4,\n                \"Unit\": \"KILOGRAMS\"\n            }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/shoppingList/649418252e88c2338940fbbe/ingredient",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"shoppingList",
+								"649418252e88c2338940fbbe",
+								"ingredient"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -26,7 +26,6 @@ func CreateRecipe(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	sendJson(w, recipe)
 }
 
 func GetRecipe(w http.ResponseWriter, r *http.Request) {

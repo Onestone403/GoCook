@@ -42,6 +42,11 @@ func CreateRecipe(ctx context.Context, recipe *model.Recipe) error {
 			return errors.New("Not authorized to create recipe")
 		}
 	}
+	user, err := GetUserByID(ctx)
+	if err != nil {
+		return err
+	}
+	recipe.CookID = user.ID
 	insertResult, err := db.RecipeCollection.InsertOne(ctx, recipe)
 	if err != nil {
 		log.Errorf("Could not store new recipe in database: %v", err)
