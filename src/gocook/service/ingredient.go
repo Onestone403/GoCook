@@ -18,6 +18,7 @@ func AddIngredient(ctx context.Context, shoppingListID primitive.ObjectID, ingre
 	if err != nil {
 		return nil, err
 	}
+
 	decisionRequest, err := PrepareDecsisionRequest(ctx, shoppingList)
 	if err != nil {
 		return nil, err

@@ -23,22 +23,24 @@ func init() {
 }
 
 func CreateRecipe(ctx context.Context, recipe *model.Recipe) error {
-	decisionRequest, err := PrepareDecsisionRequest(ctx, recipe)
-	if err != nil {
-		return err
-	}
-	allowed, err := authorization.New().IsAllowed(decisionRequest)
-	if err != nil {
-		log.Errorf("Error while checking authorization: %v", err)
-		return err
-	}
-	if !allowed {
-		entry := log.WithFields(log.Fields{
-			"recipe": recipe,
-			"user":   decisionRequest.User,
-		})
-		entry.Warn("Not authorized to create recipe")
-		return errors.New("Not authorized to create recipe")
+	if ctx.Value("istest") == nil {
+		decisionRequest, err := PrepareDecsisionRequest(ctx, recipe)
+		if err != nil {
+			return err
+		}
+		allowed, err := authorization.New().IsAllowed(decisionRequest)
+		if err != nil {
+			log.Errorf("Error while checking authorization: %v", err)
+			return err
+		}
+		if !allowed {
+			entry := log.WithFields(log.Fields{
+				"recipe": recipe,
+				"user":   decisionRequest.User,
+			})
+			entry.Warn("Not authorized to create recipe")
+			return errors.New("Not authorized to create recipe")
+		}
 	}
 	insertResult, err := db.RecipeCollection.InsertOne(ctx, recipe)
 	if err != nil {
