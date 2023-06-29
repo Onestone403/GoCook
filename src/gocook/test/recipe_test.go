@@ -12,6 +12,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/gorilla/mux"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -45,6 +46,7 @@ func (suite *RecipeTestSuite) Test_01_CreateRecipe() {
 	req := httptest.NewRequest(http.MethodPost, "/dummy-url", bytes.NewBufferString(json_data))
 	req.Header.Set("Content-Type", "application/json")
 	ctx := context.WithValue(req.Context(), "istest", true)
+	ctx = context.WithValue(ctx, "userID", "000000000000000000000001")
 
 	req = req.WithContext(ctx)
 	handler := http.HandlerFunc(handler.CreateRecipe)
@@ -79,7 +81,10 @@ func (suite *RecipeTestSuite) Test_02_GetRecipes() {
 		fmt.Print(err)
 		assert.Fail(suite.T(), "Error unmarshalling recipe")
 	}
+
 	suite.recipe = &recipes[0]
+
+	fmt.Printf("Test passed with recipe received: %v", suite.recipe)
 	assert.Equal(suite.T(), "Pommes", suite.recipe.Name)
 }
 
@@ -90,6 +95,9 @@ func (suite *RecipeTestSuite) Test_03_GetRecipe() {
 	fmt.Printf("Recipe ID: %v", suite.recipe.ID)
 	req = req.WithContext(context.WithValue(req.Context(), "id", suite.recipe.ID))
 
+	vars := map[string]string{
+		"id": suite.recipe.ID.Hex()}
+	req = mux.SetURLVars(req, vars)
 	handler := http.HandlerFunc(handler.GetRecipe)
 
 	handler.ServeHTTP(rr, req)
@@ -106,6 +114,56 @@ func (suite *RecipeTestSuite) Test_03_GetRecipe() {
 		assert.Fail(suite.T(), "Error unmarshalling recipe")
 	}
 	assert.Equal(suite.T(), "Pommes", recipe.Name)
+}
+
+func (suite *RecipeTestSuite) Test_04_UpdateRecipe() {
+	fmt.Println("-- From TestUpdateRecipe")
+	json_data := `{"name":"Pommes XXL","ingredients":[{"name":"Potato","neededAmount":2.0,"unit":"KILOGRAMS"},
+	{"name":"FryFat","neededAmount":4.0,"unit":"LITER"}],"CookId":"000000000000000000000001"}`
+	rr := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodPut, "/dummy-url", bytes.NewBufferString(json_data))
+	req.Header.Set("Content-Type", "application/json")
+	ctx := context.WithValue(req.Context(), "istest", true)
+	ctx = context.WithValue(ctx, "userID", "000000000000000000000001")
+
+	req = req.WithContext(ctx)
+	vars := map[string]string{
+		"id": suite.recipe.ID.Hex()}
+	req = mux.SetURLVars(req, vars)
+	handler := http.HandlerFunc(handler.UpdateRecipe)
+
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Result().StatusCode; status != http.StatusOK {
+		msg := fmt.Sprintf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+		assert.Fail(suite.T(), msg)
+		return
+	}
+	fmt.Printf("Test passed with recipe: %v", rr.Body.String())
+
+}
+
+func (suite *RecipeTestSuite) Test_05_DeleteRecipe() {
+	fmt.Println("-- From TestDeleteRecipe")
+	rr := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodDelete, "/recipe/:id", nil)
+
+	ctx := context.WithValue(req.Context(), "istest", true)
+	ctx = context.WithValue(ctx, "userID", "000000000000000000000001")
+
+	req = req.WithContext(context.WithValue(ctx, "id", suite.recipe.ID))
+
+	vars := map[string]string{
+		"id": suite.recipe.ID.Hex()}
+	req = mux.SetURLVars(req, vars)
+	handler := http.HandlerFunc(handler.DeleteRecipe)
+
+	handler.ServeHTTP(rr, req)
+	if status := rr.Result().StatusCode; status != http.StatusOK {
+		msg := fmt.Sprintf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+		assert.Fail(suite.T(), msg)
+		return
+	}
 }
 
 func TestRecipeTestSuite(t *testing.T) {

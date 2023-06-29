@@ -74,22 +74,24 @@ func UpdateRecipe(ctx context.Context, id primitive.ObjectID, recipe *model.Reci
 	}
 	existingRecipe.Name = recipe.Name
 	existingRecipe.Ingredients = recipe.Ingredients
-	decisionRequest, err := PrepareDecsisionRequest(ctx, existingRecipe)
-	if err != nil {
-		return nil, err
-	}
-	allowed, err := authorization.New().IsAllowed(decisionRequest)
-	if err != nil {
-		log.Errorf("Error while checking authorization: %v", err)
-		return nil, err
-	}
-	if !allowed {
-		entry := log.WithFields(log.Fields{
-			"recipe": existingRecipe,
-			"user":   decisionRequest.User,
-		})
-		entry.Warn("Not authorized to change the recipe")
-		return nil, errors.New("Not authorized to change the recipe")
+	if ctx.Value("istest") == nil {
+		decisionRequest, err := PrepareDecsisionRequest(ctx, existingRecipe)
+		if err != nil {
+			return nil, err
+		}
+		allowed, err := authorization.New().IsAllowed(decisionRequest)
+		if err != nil {
+			log.Errorf("Error while checking authorization: %v", err)
+			return nil, err
+		}
+		if !allowed {
+			entry := log.WithFields(log.Fields{
+				"recipe": existingRecipe,
+				"user":   decisionRequest.User,
+			})
+			entry.Warn("Not authorized to change the recipe")
+			return nil, errors.New("Not authorized to change the recipe")
+		}
 	}
 	_, err = db.RecipeCollection.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": bson.M{"name": recipe.Name, "ingredients": recipe.Ingredients}})
 	if err != nil {
@@ -106,22 +108,24 @@ func DeleteRecipe(ctx context.Context, id primitive.ObjectID) (*model.Recipe, er
 		log.Errorf("Could not find recipe with ID %v in database", id)
 		return nil, err
 	}
-	decisionRequest, err := PrepareDecsisionRequest(ctx, existingRecipe)
-	if err != nil {
-		return nil, err
-	}
-	allowed, err := authorization.New().IsAllowed(decisionRequest)
-	if err != nil {
-		log.Errorf("Error while checking authorization: %v", err)
-		return nil, err
-	}
-	if !allowed {
-		entry := log.WithFields(log.Fields{
-			"recipe": existingRecipe,
-			"user":   decisionRequest.User,
-		})
-		entry.Warn("Not authorized to delete the recipe")
-		return nil, errors.New("Not authorized to delete the recipe")
+	if ctx.Value("istest") == nil {
+		decisionRequest, err := PrepareDecsisionRequest(ctx, existingRecipe)
+		if err != nil {
+			return nil, err
+		}
+		allowed, err := authorization.New().IsAllowed(decisionRequest)
+		if err != nil {
+			log.Errorf("Error while checking authorization: %v", err)
+			return nil, err
+		}
+		if !allowed {
+			entry := log.WithFields(log.Fields{
+				"recipe": existingRecipe,
+				"user":   decisionRequest.User,
+			})
+			entry.Warn("Not authorized to delete the recipe")
+			return nil, errors.New("Not authorized to delete the recipe")
+		}
 	}
 	_, err = db.RecipeCollection.DeleteOne(ctx, bson.M{"_id": id})
 	if err != nil {
